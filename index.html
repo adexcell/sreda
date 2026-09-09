@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/main.css">
+  <title>Среда</title>
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-logo" href="/">Среда</a>
+    <nav class="site-nav">
+      <a class="site-nav__link" href="#report">Сообщить о проблеме</a>
+    </nav>
+  </header>
+
+  <main class="page-main">
+    <section class="hero">
+      <div class="hero__content">
+        <h1 class="hero__title">Сообщите о проблеме во дворе за пару минут</h1>
+        <p class="hero__text">Сломанный фонарь, мусор у подъезда или разбитая лавочка — отметьте место на карте,
+          добавьте фото и следите за статусом обращения.</p>
+        <a class="button button--primary hero__action" href="#report">Сообщить о проблеме</a>
+      </div>
+      <aside class="hero-card" aria-label="Пример обращения">
+        <p class="hero-card__label">Обращение #1248</p>
+        <h2 class="hero-card__title">Сломанный фонарь у детской площадки</h2>
+        <p class="hero-card__text">Адрес уточнен модератором. Обращение передано в городскую службу.</p>
+        <span class="hero-card__status">На проверке</span>
+      </aside>
+    </section>
+
+    <section class="report-section" id="report">
+      <h2 class="report-section__title">Сообщить о проблеме</h2>
+      <p class="report-section__text">Опишите ситуацию. Мы не будем показывать ваши контактные данные публично.</p>
+
+      <form class="form" action="#" method="post">
+        <div class="form-field">
+          <label class="field-label" for="happening">Что случилось?</label>
+          <textarea
+            class="field"
+            name="happening"
+            id="happening"
+            placeholder="Например: во дворе не работает фонарь у третьего подъезда"
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-field">
+          <label class="field-label" for="happening-place">Где это находится?</label>
+          <textarea
+            class="field"
+            name="happening-place"
+            id="happening-place"
+            placeholder="Например: ул. Ленина, 10, возле детской площадки"
+            required
+          ></textarea>
+          <p class="field-hint">Не указывайте квартиру или личные данные. 
+            Достаточно места во дворе или рядом с объектом.</p>
+        </div>
+
+        <div class="form-field">
+          <label class="field-label" for="happening-category">Категория</label>
+          <select class="field" name="happening-category" id="happening-category" required>
+            <option value="" disabled selected>Выберите категорию</option>
+            <option value="lighting">Освещение</option>
+            <option value="trash">Мусор</option>
+            <option value="yard">Двор</option>
+            <option value="other">Другое</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label class="field-label" for="happening-photo">Фото. Необязательно</label>
+          <input class="field" type="file" name="happening-photo" id="happening-photo" accept="image/*">
+          <p class="field-hint">Перед отправкой убедитесь, 
+            что на фото нет лиц людей, номеров машин, квартир и документов.</p>
+        </div>
+
+        <div class="form-field">
+          <label class="field-label" for="happening-contact">Как с вами связаться? Необязательно</label>
+          <textarea class="field" name="happening-contact" id="happening-contact"></textarea>
+          <p class="field-hint">Телефон или email увидит только модератор обращения.</p>
+        </div>
+
+        <button class="button button--dark form__submit" type="submit">Отправить обращение</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+
+  </footer>
+</body>
+</html>

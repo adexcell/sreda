@@ -1,0 +1,20 @@
+/* отвечает за раскладку страницы */
+.site-header,
+.page-main,
+.site-footer {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: var(--space-12);
+}
+
+
+
+@media (max-width: 640px) {
+  .site-header,
+  .page-main,
+  .site-footer {
+    padding: var(--space-4);
+  }
+
+
+}
