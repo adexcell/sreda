@@ -1,0 +1,16 @@
+{
+	"name": "sreda",
+	"private": true,
+	"type": "module",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"scripts": {
+		"typecheck": "npm run --workspaces --if-present typecheck"
+	},
+	"devDependencies": {
+		"@types/node": "^22.20.2",
+		"typescript": "^7.0.2"
+	}
+}
