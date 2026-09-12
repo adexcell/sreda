@@ -206,11 +206,59 @@ export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
    - `"include": ["src/**/*"]`.
 3. **Установить зависимости**:
    - Выполнить `npm install` из корня.
-4. **Написать `apps/server/src/index.ts`**:
-   - Создать сервер Fastify с логгером.
-   - Роут `GET /health` -> `{ status: 'ok', uptime: number }`.
-   - Роут `GET /api/v1/workspaces` -> типизированный ответ `ApiResponse<Workspace[]>`.
-   - Запуск на порту `3001` (host `0.0.0.0`).
+---
+
+## 📅 Запись 9: Code Review Шага 1.1 — Промышленная архитектура бэкенда
+
+### 🔍 Результаты Code Review
+1. **Слоистая архитектура (Layered Architecture)**:
+   - Создана чистая модульная структура `apps/server-fastify/src/modules/`.
+   - `WorkspacesService`: инкапсулирует бизнес-логику и подготовку данных.
+   - `WorkspacesController`: обрабатывает входящие HTTP-запросы и оборачивает ответы в контракт `ApiResponse<Workspace[]>`.
+   - `WorkspacesRoutes`: Fastify Plugin для изоляции маршрутов модуля с префиксом `/api/v1`.
+2. **Фабрика приложения (`app.ts`)**:
+   - Реализована функция `buildApp(): FastifyInstance`, что позволяет запускать тесты без поднятия сетевых сокетов (`app.inject()`).
+3. **Graceful Shutdown (`index.ts`)**:
+   - Настроена корректная обработка системных сигналов `SIGINT` и `SIGTERM` через `await app.close()`.
+4. **Проверка работоспособности**:
+   - Сервер успешно запускается через `tsx watch src/index.ts` на порту `3001`.
+   - Эндпоинты `GET /health` и `GET /api/v1/workspaces` возвращают корректный JSON со статусом 200 OK.
+   - Проверка типов (`tsc --noEmit`) проходит без единой ошибки.
+
+---
+
+## 📅 Запись 10: Шаг 1.2 — Валидация Zod, Обработка ошибок (AppError) и POST/GET по ID
+
+### 📚 Теория: Сквозная валидация схем и управление ошибками
+
+1. **Зачем нужен Zod в пакете `@sreda/shared`?**
+   - TypeScript проверяет типы только во время компиляции. В рантайме типы стираются.
+   - `Zod` валидирует данные в рантайме (проверяет длину строк, регулярные выражения, формат UUID/slug).
+   - Принцип **Single Source of Truth**: Zod-схема компилирует и TypeScript-тип (`z.infer<typeof schema>`), и валидатор для бэкенда, и валидатор форм на фронтенде.
+
+2. **Иерархия ошибок приложения (`AppError`)**:
+   - Базовый класс `AppError extends Error` с полями `statusCode`, `code`, `details`.
+   - Специализированные классы:
+     - `NotFoundError` (HTTP 404, `NOT_FOUND`)
+     - `ValidationError` (HTTP 400, `VALIDATION_ERROR`)
+     - `ConflictError` (HTTP 409, `CONFLICT`)
+     - `UnauthorizedError` (HTTP 401, `UNAUTHORIZED`)
+     - `ForbiddenError` (HTTP 403, `FORBIDDEN`)
+
+3. **Централизованный `setErrorHandler` в Fastify**:
+   - Любое исключение, выброшенное в `Service` или `Controller`, перехватывается глобальным обработчиком в `app.ts`.
+   - Ответ всегда гарантированно соответствует единому формату `ApiErrorResponse`:
+     ```json
+     {
+       "success": false,
+       "error": {
+         "code": "NOT_FOUND",
+         "message": "Воркспейс с id 'ws-999' не найден"
+       }
+     }
+     ```
+
+
 
 
 

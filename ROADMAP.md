@@ -24,26 +24,27 @@ flowchart TD
 ## 📌 План модулей и прогресс
 
 ### 🔹 Фаза 0: Погружение в TypeScript и инструментарий
-- [ ] **0.1. TypeScript Core**:
+- [x] **0.1. TypeScript Core**:
   - Примитивы, интерфейсы (`interface`) vs типы (`type`).
   - Generics (обобщения), Union/Intersection types, Type Guards.
   - Utility Types (`Pick`, `Omit`, `Partial`, `Record`, `ReturnType`).
   - Strict mode, `tsconfig.json` и типизация сторонних библиотек.
-- [ ] **0.2. Организация монорепозитория / мультипакета**:
-  - Настройка рабочего пространства (Monorepo с `pnpm workspaces` или структурированный проект `frontend` + `backend` + `shared-types`).
-  - Линтинг и форматирование: ESLint 9 (Flat Config), Prettier, Husky + lint-staged.
+- [x] **0.2. Организация монорепозитория / мультипакета**:
+  - Настройка рабочего пространства (Monorepo с npm workspaces и polyglot apps).
+  - Пакет `@sreda/shared` как единый источник правды контрактов.
 
 ---
 
 ### 🔹 Фаза 1: Backend Core на Node.js + TypeScript
-- [ ] **1.1. Архитектура Node.js & Runtime**:
-  - Event Loop, асинхронность, Streams & Buffers, обработка ошибок.
-  - Выбор фреймворка: *Fastify vs Express vs NestJS* (разбор: когда и почему).
-- [ ] **1.2. Архитектура приложения (Layered / Clean Architecture)**:
-  - Controllers (маршруты и валидация) -> Services (бизнес-логика) -> Repositories (работа с данными).
-  - Dependency Injection (DI) и инверсия зависимостей (IoC).
-  - Сквозная валидация схем через `Zod` / `TypeBox`.
-  - Централизованная обработка ошибок (`AppError`, HTTP status codes, logger Pino/Winston).
+- [x] **1.1. Архитектура Node.js & Runtime & Fastify Init**:
+  - Инициализация `@sreda/server-fastify` на TypeScript + `tsx`.
+  - Модульная слоистая структура (Controllers, Services, Routes, App Factory, Graceful Shutdown).
+  - Связка с `@sreda/shared` (ApiResponse, Workspace).
+- [x] **1.2. Архитектура приложения (Layered / Clean Architecture & Validation)**:
+  - Controllers (маршруты и валидация) -> Services (бизнес-логика in-memory / ORM).
+  - Сквозная валидация схем через `Zod` в `@sreda/shared` (`createWorkspaceSchema`, `CreateWorkspaceDto`).
+  - Централизованная обработка ошибок (`AppError`, `NotFoundError`, `ConflictError`, `ValidationError` в `setErrorHandler`).
+  - Интерактивная спецификация и тестирование через `api.http`.
 
 ---
 

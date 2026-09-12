@@ -1,3 +1,16 @@
+import { z } from "zod";
+
+export const createWorkspaceSchema = z.object({
+	name: z.string().min(2, 'Название должно содержать минимум 2 символа').max(50),
+	slug: z
+		.string()
+		.min(2)
+		.max(50)
+		.regex(/^[a-z0-9-]+$/, 'Slug должен содержать только латинские буквы, цифры и дефисы'),
+});
+
+export type CreateWorkspaceDto = z.infer<typeof createWorkspaceSchema>
+
 export type UserRole = "owner" | "admin" | "member" | "viewer";
 
 export interface User {
@@ -55,8 +68,6 @@ export type CreateTaskDto = Optional<
 	Omit<Task, "id" | "createdAt" | "updatedAt" | "creatorId">,
 	"status" | "priority" | "order"
 >;
-
-export type CreateWorkspaceDto = Pick<Workspace, "name" | "slug">;
 
 export type UpdateTaskDto = Partial<CreateTaskDto>;
 export interface AuthCredentialsDto {

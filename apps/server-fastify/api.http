@@ -1,0 +1,44 @@
+### Переменные окружения
+@baseUrl = http://localhost:3001
+
+### 1. Healthcheck сервера
+GET {{baseUrl}}/health
+Accept: application/json
+
+### 2. Получить список всех воркспейсов
+GET {{baseUrl}}/api/v1/workspaces
+Accept: application/json
+
+### 3. Получить воркспейс по ID — Успех (200 OK)
+GET {{baseUrl}}/api/v1/workspaces/ws-1
+Accept: application/json
+
+### 4. Получить воркспейс по ID — Ошибка 404 (NOT_FOUND)
+GET {{baseUrl}}/api/v1/workspaces/unknown-id-123
+
+### 5. Создать новый воркспейс — Успех (201 Created)
+POST {{baseUrl}}/api/v1/workspaces
+Content-Type: application/json
+
+{
+  "name": "Инженерная команда",
+  "slug": "eng-team"
+}
+
+### 6. Создать дубликат воркспейса — Ошибка 409 (CONFLICT)
+POST {{baseUrl}}/api/v1/workspaces
+Content-Type: application/json
+
+{
+  "name": "Попытка дубликата",
+  "slug": "main-workspace"
+}
+
+### 7. Создать с невалидными данными — Ошибка 400 (VALIDATION_ERROR от Zod)
+POST {{baseUrl}}/api/v1/workspaces
+Content-Type: application/json
+
+{
+  "name": "A",
+  "slug": "НЕВАЛИДНЫЙ SLUG С ПРОБЕЛАМИ И РУССКИМИ БУКВАМИ"
+}
