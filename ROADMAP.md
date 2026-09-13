@@ -49,11 +49,11 @@ flowchart TD
 ---
 
 ### 🔹 Фаза 2: Базы данных, Безопасность и Авторизация
-- [ ] **2.1. PostgreSQL & ORM**:
-  - Реляционное моделирование: Таблицы `users`, `workspaces`, `projects`, `tasks`, `comments`.
-  - Связи: 1-to-1, 1-to-many, many-to-many. Индексы и оптимизация запросов.
-  - Выбор ORM/Query Builder: *Drizzle ORM vs Prisma* (плюсы, минусы, производительность).
-  - Миграции и сидинг данных.
+- [x] **2.1. PostgreSQL & Drizzle ORM & Repositories**:
+  - Реляционное моделирование в Drizzle: таблицы `users`, `workspaces`, `tasks` и связи `relations`.
+  - Docker Compose (PostgreSQL 16).
+  - Слой `WorkspacesRepository` и типизация через `typeof schema.$inferSelect`.
+  - Миграции (`drizzle-kit push`) и скрипт сидинга (`src/db/seed.ts`).
 - [ ] **2.2. Authentication & Authorization (Безопасность)**:
   - Хеширование паролей (`argon2` / `bcrypt`).
   - JWT архитектура: Access Token (в памяти/заголовке) + Refresh Token (HttpOnly Cookie, ротация сессий в Redis/Postgres).
@@ -135,4 +135,5 @@ flowchart TD
 | **0.2** | TypeScript: Базовые конфиги и доменные типы | ✅ Выполнено | tsconfig.base.json, доменные модели и Discriminated Unions |
 | **1.1** | Fastify Backend & Промышленная архитектура | ✅ Выполнено | Модули, слои (Controllers, Services, Routes), Graceful Shutdown |
 | **1.2** | Zod-валидация & Централизованная обработка ошибок | ✅ Выполнено | Zod DTO в shared, AppError, errorHandler в Fastify, api.http тесты |
-| **2.1** | PostgreSQL & Drizzle ORM | 🔄 Следующий шаг | Моделирование БД, миграции, подключение репозиториев |
+| **2.1** | PostgreSQL, Drizzle ORM & Repository Pattern | ✅ Выполнено | Docker Compose, реляционная схема, WorkspacesRepository, seed |
+| **2.2** | Аутентификация, JWT & Защита маршрутов | 🔄 Следующий шаг | Argon2/Bcrypt, Access/Refresh JWT, Fastify Auth Guards |

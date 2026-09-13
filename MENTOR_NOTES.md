@@ -272,6 +272,25 @@ export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 Все слои (Zod DTO -> Controller -> Service -> ErrorHandler -> api.http) работают стабильно и согласованно.
 
+---
+
+## 📅 Запись 12: Шаг 2.1 — PostgreSQL, Drizzle ORM и Repository Pattern
+
+### 🔍 Результаты внедрения
+1. **Инфраструктура базы данных**:
+   - PostgreSQL 16 поднят в Docker Compose (`sreda-postgres`).
+   - Настроен пул подключений через `postgres-js` и Drizzle ORM (`src/db/index.ts`).
+2. **Реляционная схема (`src/db/schema.ts`)**:
+   - Таблицы `users`, `workspaces`, `tasks` с UUID primary keys, каскадными внешними ключами (`onDelete: 'cascade'`), индексами уникальности (`email`, `slug`) и временными метками `withTimezone`.
+   - Настроены отношения `relations` для декларативных реляционных запросов.
+3. **Паттерн Репозиторий (`WorkspacesRepository`)**:
+   - Полная изоляция SQL-запросов от бизнес-логики сервисов.
+   - Использование авто-вывода типов `typeof workspaces.$inferSelect`.
+4. **Миграции и Сидинг данных**:
+   - Схема успешно применена через `drizzle-kit push`.
+   - Скрипт `src/db/seed.ts` заполняет начального пользователя и воркспейс.
+
+
 
 
 

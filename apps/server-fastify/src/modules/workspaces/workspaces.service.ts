@@ -1,48 +1,37 @@
 import type { CreateWorkspaceDto, Workspace } from "@sreda/shared"
 import { ConflictError, NotFoundError } from "../../common/errors/app-error";
-import { randomUUID } from "node:crypto";
+import { workspacesRepository, WorkspacesRepository } from "./workspaces.repository";
 
 
 export class WorkspacesService {
-	private workspaces: Workspace[] = [
-		{
-			id: 'ws-1',
-			name: 'Основной workspace',
-			slug: 'main-workspace',
-			ownerId: 'user-1',
-			createdAt: new Date().toISOString(),
-		},
-	];
-	
+	constructor(private readonly repo: WorkspacesRepository = workspacesRepository) {}
+
 	async getAll(): Promise<Workspace[]> {
-		return this.workspaces;
+		return this.repo.findMany();
 	}
 
 	async getById(id: string): Promise<Workspace> {
-		const workspace = this.workspaces.find((w) => w.id === id)
+		const workspace = await this.repo.findById(id)
 		if (!workspace) {
 			throw new NotFoundError('Workspace не найден');
 		};
 		return workspace;
 	}
 
-	async create(dto: CreateWorkspaceDto): Promise<Workspace> {
-		const exists = this.workspaces.some((w) => w.slug === dto.slug)
+	async create(
+		dto: CreateWorkspaceDto,
+		ownerId: string = '00000000-0000-0000-0000-000000000001'
+	): Promise<Workspace> {
+		const exists = await this.repo.findBySlug(dto.slug);
 		if (exists) {
-			throw new ConflictError('Workspace с таким slug уже существует');
+			throw new ConflictError(`Workspace со slug '${dto.slug}' уже существует`);
 		}
 
-		const newWorkspace: Workspace = {
-			id: randomUUID(),
+		return this.repo.create({
 			name: dto.name,
 			slug: dto.slug,
-			ownerId: 'user-1',
-			createdAt: new Date().toISOString(),
-		}
-
-		this.workspaces.push(newWorkspace)
-
-		return newWorkspace
+			ownerId,
+		})
 	}
 }
 
