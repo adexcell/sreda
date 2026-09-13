@@ -258,6 +258,21 @@ export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
      }
      ```
 
+---
+
+## 📅 Запись 11: Успешное тестирование Шага 1.2 & Переход к Фазе 2
+
+### 🔍 Итоги тестирования
+- **`GET /api/v1/workspaces`** → возвращает `200 OK` со списком воркспейсов.
+- **`GET /api/v1/workspaces/ws-1`** → возвращает `200 OK` с конкретным объектом воркспейса.
+- **`GET /api/v1/workspaces/unknown`** → возвращает `404 Not Found` (`code: "NOT_FOUND"`).
+- **`POST /api/v1/workspaces`** (валидное тело) → возвращает `201 Created` и добавляет объект с уникальным UUID.
+- **`POST /api/v1/workspaces`** (дубликат slug) → возвращает `409 Conflict` (`code: "CONFLICT"`).
+- **`POST /api/v1/workspaces`** (невалидные данные) → Zod ловит ошибки и возвращает `400 Bad Request` с путями полей в `details`.
+
+Все слои (Zod DTO -> Controller -> Service -> ErrorHandler -> api.http) работают стабильно и согласованно.
+
+
 
 
 

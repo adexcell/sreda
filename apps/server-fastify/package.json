@@ -3,15 +3,23 @@
   "type": "module",
   "dependencies": {
     "@sreda/shared": "*",
+    "drizzle-orm": "^0.45.2",
     "fastify": "^4.28.1",
+    "postgres": "^3.4.9",
     "zod": "^4.6.2"
   },
   "devDependencies": {
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.19.0",
     "typescript": "^7.0.2"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   }
 }

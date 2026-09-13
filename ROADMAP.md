@@ -133,5 +133,6 @@ flowchart TD
 |---|---|---|---|
 | **0.1** | Инициализация монорепозитория (workspaces) | ✅ Выполнено | Структура apps/ и packages/ настроена, package.json скорректирован |
 | **0.2** | TypeScript: Базовые конфиги и доменные типы | ✅ Выполнено | tsconfig.base.json, доменные модели и Discriminated Unions |
-| **0.3** | Utility Types и DTO (@sreda/shared) | ✅ Выполнено | Кастомный Optional, DTO для задач, воркспейсов и авторизации |
-| **1.1** | Backend Core: Выбор стека, Fastify и Zod-валидация | 🔄 Следующий шаг | Архитектура сервера, первый роут и схемы валидации |
+| **1.1** | Fastify Backend & Промышленная архитектура | ✅ Выполнено | Модули, слои (Controllers, Services, Routes), Graceful Shutdown |
+| **1.2** | Zod-валидация & Централизованная обработка ошибок | ✅ Выполнено | Zod DTO в shared, AppError, errorHandler в Fastify, api.http тесты |
+| **2.1** | PostgreSQL & Drizzle ORM | 🔄 Следующий шаг | Моделирование БД, миграции, подключение репозиториев |
