@@ -25,7 +25,7 @@ export class WorkspacesController {
 		reply: FastifyReply
 	): Promise<ApiResponse<Workspace>> {
 		const validateBody = createWorkspaceSchema.parse(request.body);
-		const newWorkspace = await workspacesService.create(validateBody);
+		const newWorkspace = await workspacesService.create(validateBody, request.user.id);
 
 		reply.status(201);
 		return { success: true, data: newWorkspace };

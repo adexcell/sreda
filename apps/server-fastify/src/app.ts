@@ -1,13 +1,30 @@
-import Fastify, { FastifyInstance } from "fastify";
+import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import fastifyCookie from '@fastify/cookie';
+import fastifyJwt from '@fastify/jwt';
 import { ZodError } from "zod";
 import type { ApiErrorResponse } from "@sreda/shared";
-import { AppError } from "./common/errors/app-error";
+import { AppError, UnauthorizedError } from "./common/errors/app-error";
+import { authRoutes } from "./modules/auth/auth.routes";
 import { healthRoutes } from "./modules/health/health.routes";
 import { workspacesRoutes } from "./modules/workspaces/workspaces.routes";
 
 export function buildApp(): FastifyInstance {
-	const app = Fastify({
-		logger: true,
+	const app = Fastify({ logger: true });
+
+	app.register(fastifyCookie, {
+		secret: process.env.COOKIE_SECRET || 'cookie-secret-key-32-chars-long!',
+	});
+
+	app.register(fastifyJwt, {
+		secret: process.env.JWT_SECRET || 'jwt-secret-key-32-chars-long!',
+	});
+
+	app.decorate('authenticate', async (request: FastifyRequest, _reply: FastifyReply) => {
+		try {
+			await request.jwtVerify();
+		} catch (error) {
+			throw new UnauthorizedError('Недействительный или просроченный токен авторизации');
+		}
 	});
 
 	app.setErrorHandler((error, _request, reply) => {
@@ -50,6 +67,7 @@ export function buildApp(): FastifyInstance {
 	});
 
 	app.register(healthRoutes);
+	app.register(authRoutes, { prefix: "/api/v1/auth" })
 	app.register(workspacesRoutes, { prefix: "/api/v1" });
 
 	return app;
