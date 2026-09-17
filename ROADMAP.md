@@ -54,11 +54,11 @@ flowchart TD
   - Docker Compose (PostgreSQL 16).
   - Слой `WorkspacesRepository` и типизация через `typeof schema.$inferSelect`.
   - Миграции (`drizzle-kit push`) и скрипт сидинга (`src/db/seed.ts`).
-- [ ] **2.2. Authentication & Authorization (Безопасность)**:
-  - Хеширование паролей (`argon2` / `bcrypt`).
-  - JWT архитектура: Access Token (в памяти/заголовке) + Refresh Token (HttpOnly Cookie, ротация сессий в Redis/Postgres).
-  - RBAC (Role-Based Access Control): Роли `Owner`, `Admin`, `Member`, `Viewer` с гранулярными правами.
-  - Защита: CORS, Rate Limiting, Helmet, XSS, CSRF.
+- [x] **2.2. Authentication & Authorization (Безопасность & JWT)**:
+  - Хеширование паролей с солью через `bcryptjs`.
+  - Dual-Token JWT архитектура: Access Token (15 мин) + Refresh Token в `HttpOnly Cookie` (7 дней).
+  - Модуль `auth`: роуты `register`, `login`, `refresh`, `logout`, `me`.
+  - Fastify Auth Guard (`fastify.authenticate`) и защита создания воркспейсов (`ownerId` из `request.user.id`).
 
 ---
 
@@ -136,4 +136,5 @@ flowchart TD
 | **1.1** | Fastify Backend & Промышленная архитектура | ✅ Выполнено | Модули, слои (Controllers, Services, Routes), Graceful Shutdown |
 | **1.2** | Zod-валидация & Централизованная обработка ошибок | ✅ Выполнено | Zod DTO в shared, AppError, errorHandler в Fastify, api.http тесты |
 | **2.1** | PostgreSQL, Drizzle ORM & Repository Pattern | ✅ Выполнено | Docker Compose, реляционная схема, WorkspacesRepository, seed |
-| **2.2** | Аутентификация, JWT & Защита маршрутов | 🔄 Следующий шаг | Argon2/Bcrypt, Access/Refresh JWT, Fastify Auth Guards |
+| **2.2** | Аутентификация, JWT & Защита маршрутов | ✅ Выполнено | Bcryptjs, Access/Refresh JWT, HttpOnly Cookie, Auth Guard |
+| **3.1** | Vue 3: Composition API & Reactivity Engine | 🔄 Следующий шаг | Proxy, ref, reactive, computed, watch, потеря реактивности |

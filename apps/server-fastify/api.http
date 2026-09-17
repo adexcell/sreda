@@ -42,3 +42,11 @@ Content-Type: application/json
   "name": "A",
   "slug": "НЕВАЛИДНЫЙ SLUG С ПРОБЕЛАМИ И РУССКИМИ БУКВАМИ"
 }
+
+### 8. Ротация токена (Refresh) через HttpOnly Cookie (200 OK)
+POST {{baseUrl}}/api/v1/auth/refresh
+Accept: application/json
+
+### 9. Выход из системы (Logout) - очистка Cookie (200 OK)
+POST {{baseUrl}}/api/v1/auth/logout
+Accept: application/json

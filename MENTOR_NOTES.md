@@ -290,6 +290,27 @@ export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
    - Схема успешно применена через `drizzle-kit push`.
    - Скрипт `src/db/seed.ts` заполняет начального пользователя и воркспейс.
 
+---
+
+## 📅 Запись 13: Шаг 2.2 — Аутентификация, Dual-Token JWT и Защита маршрутов
+
+### 🔍 Результаты внедрения
+1. **Безопасность и Хеширование**:
+   - Интегрирован `bcryptjs` для хеширования паролей с солью (10-12 раундов) при регистрации и безопасной проверки при логине.
+2. **Dual-Token Pattern (Access + Refresh)**:
+   - `Access Token` (15 минут) — подписывается Fastify JWT, передается в заголовке `Authorization: Bearer <token>`.
+   - `Refresh Token` (7 дней) — возвращается в защищенной `HttpOnly` Cookie (`SameSite=Lax`, `Path=/`), защищен от XSS.
+   - Реализована ротация токенов на эндпоинте `POST /api/v1/auth/refresh`.
+3. **Модуль Auth & Users**:
+   - `UsersRepository`: методы `findByEmailWithPassword`, `findById`, `create`.
+   - `AuthService`: чистая бизнес-логика регистрации, проверки учетных данных и валидации пользователя.
+   - `AuthController` & `AuthRoutes`: эндпоинты `register`, `login`, `refresh`, `logout`, `me`.
+4. **Auth Guard & Интеграция**:
+   - Декоратор `fastify.authenticate` проверяет JWT и наполняет `request.user`.
+   - Защищен эндпоинт `POST /api/v1/workspaces` — воркспейсы привязываются к реальному `request.user.id`.
+   - Вся цепочка протестирована через `apps/server-fastify/api.http`.
+
+
 
 
 
